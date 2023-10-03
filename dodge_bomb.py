@@ -43,7 +43,6 @@ def main():
         (0, 5):pg.transform.rotozoom(kk_img2, -90, 1.0)
     }
 
-
     """爆弾"""
     bom_img = pg.Surface((20, 20))
     pg.draw.circle(bom_img, (255, 0, 0), (10, 10), 10)
@@ -68,7 +67,6 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)
     
-
     vx, vy = 5, 5
     clock = pg.time.Clock()
     tmr = 0
