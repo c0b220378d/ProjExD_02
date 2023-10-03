@@ -28,8 +28,9 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
-        screen.blit(bom_img, [r_w, r_h])
+        screen.blit(bom_img, bom_rct)
         pg.display.update()
+        bom_rct.move_ip(5, 5)
         tmr += 1
         clock.tick(10)
 
