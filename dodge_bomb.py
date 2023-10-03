@@ -70,8 +70,14 @@ def main():
             vx *= -1
         if cheak_bom[1] == False:
             vy *= -1
+
+        #衝突判定
+        if kk_rct.colliderect(bom_rct):
+            return print("END")
+
         tmr += 1
         clock.tick(50)
+
 
 
 if __name__ == "__main__":
