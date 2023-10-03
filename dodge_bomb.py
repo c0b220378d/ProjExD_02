@@ -1,6 +1,7 @@
 import random as ran
 import sys
 import pygame as pg
+import time 
 
 
 WIDTH, HEIGHT = 1600, 900
@@ -110,6 +111,13 @@ def main():
 
         # 衝突判定
         if kk_rct.colliderect(bom_rct):
+            screen.blit(bg_img, [0, 0])
+            kk_img3 =pg.image.load("ex02/fig/8.png")
+            kk_img3_1 =pg.transform.rotozoom(kk_img3, 0, 2.0)
+            screen.blit(kk_img3_1, kk_rct)
+            screen.blit(bom_img, bom_rct)
+            pg.display.update()
+            time.sleep(2)
             return
 
         tmr += 1
