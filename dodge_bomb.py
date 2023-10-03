@@ -55,6 +55,13 @@ def main():
         pg.K_LEFT:(-5, 0),
         pg.K_RIGHT:(5, 0)
     }
+    accs = [a for a in range(1, 11)] #加速度リスト
+    bb_imgs = []
+    for r in range(1, 11):
+        bom_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bom_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bom_img.set_colorkey((0, 0, 0))
+        bb_imgs.append(bom_img)
 
     """こうかとん"""
     kk_rct = kk_img.get_rect()
@@ -76,14 +83,18 @@ def main():
             if key_lst[key]:
                 sum_v[0] += mv[0]
                 sum_v[1] += mv[1]
+        
+        """爆弾の加速、拡大"""
+        avx, avy =vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+        bom_img = bb_imgs[min(tmr//500, 9)]
 
         """移動値"""
         kk_rct.move_ip(sum_v[0], sum_v[1])
-        bom_rct.move_ip(vx, vy)
+        bom_rct.move_ip(avx, avy)
 
         """表示"""
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_dct[tuple(sum_v)], kk_rct)
+        screen.blit(kk_dct[tuple(sum_v)], kk_rct) # 追記1こうかとん画像切り替え
         screen.blit(bom_img, bom_rct)
         pg.display.update()
 
@@ -99,7 +110,7 @@ def main():
 
         # 衝突判定
         if kk_rct.colliderect(bom_rct):
-            return print("END")
+            return
 
         tmr += 1
         clock.tick(50)
