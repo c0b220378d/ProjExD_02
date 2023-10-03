@@ -1,3 +1,4 @@
+import random as ran
 import sys
 import pygame as pg
 
@@ -11,6 +12,13 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    bom_img = pg.Surface((10, 10))
+    pg.draw.circle(bom_img, (255, 0, 0), (5, 5), 5)
+    bom_img.set_colorkey((0, 0, 0))
+    bom_rct = bom_img.get_rect()
+    r_w = ran.randint(0, WIDTH)
+    r_h = ran.randint(0, HEIGHT)
+    bom_rct.center = (r_w, r_h)
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -20,6 +28,7 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        screen.blit(bom_img, [r_w, r_h])
         pg.display.update()
         tmr += 1
         clock.tick(10)
