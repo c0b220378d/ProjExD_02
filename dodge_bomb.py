@@ -4,6 +4,8 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
+r_w = ran.randint(0, WIDTH)
+r_h = ran.randint(0, HEIGHT)
 
 def cheak_b(obj_rct: pg.Rect):
     """
@@ -25,12 +27,27 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_img2 = pg.transform.flip(kk_img, True, False)
+    
+    """こうかとんの向き"""
+    kk_dct = {
+        (0, 0):kk_img,
+        (-5, 0):kk_img,
+        (-5, -5):pg.transform.rotozoom(kk_img, -45, 1.0),
+        (-5, +5):pg.transform.rotozoom(kk_img, 45, 1.0),
+        (5, 0):kk_img2,
+        (5, -5):pg.transform.rotozoom(kk_img2, 45, 1.0),
+        (0, -5):pg.transform.rotozoom(kk_img2, 90, 1.0),
+        (5, 5):pg.transform.rotozoom(kk_img2, -45, 1.0),
+        (0, 5):pg.transform.rotozoom(kk_img2, -90, 1.0)
+    }
+
+
+    """爆弾"""
     bom_img = pg.Surface((20, 20))
     pg.draw.circle(bom_img, (255, 0, 0), (10, 10), 10)
     bom_img.set_colorkey((0, 0, 0))
     bom_rct = bom_img.get_rect()
-    r_w = ran.randint(0, WIDTH)
-    r_h = ran.randint(0, HEIGHT)
     bom_rct.center = (r_w, r_h)
     key_d = {
         pg.K_UP:(0, -5),
@@ -38,8 +55,12 @@ def main():
         pg.K_LEFT:(-5, 0),
         pg.K_RIGHT:(5, 0)
     }
+
+    """こうかとん"""
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)
+    
+
     vx, vy = 5, 5
     clock = pg.time.Clock()
     tmr = 0
@@ -48,20 +69,25 @@ def main():
             if event.type == pg.QUIT: 
                 return
 
-        screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, kk_rct)
-        screen.blit(bom_img, bom_rct)
-        pg.display.update()
+        """キーボード操作"""
         key_lst = pg.key.get_pressed()
         sum_v = [0, 0]
         for key, mv in key_d.items():
             if key_lst[key]:
                 sum_v[0] += mv[0]
                 sum_v[1] += mv[1]
-        bom_rct.move_ip(vx, vy)
-        kk_rct.move_ip(sum_v[0], sum_v[1])
 
-        #画面外チェック
+        """移動値"""
+        kk_rct.move_ip(sum_v[0], sum_v[1])
+        bom_rct.move_ip(vx, vy)
+
+        """表示"""
+        screen.blit(bg_img, [0, 0])
+        screen.blit(kk_dct[tuple(sum_v)], kk_rct)
+        screen.blit(bom_img, bom_rct)
+        pg.display.update()
+
+        # 画面外チェック
         cheak_kk = cheak_b(kk_rct)
         if cheak_kk != (True, True):
             kk_rct.move_ip(-sum_v[0], -sum_v[1])
@@ -71,7 +97,7 @@ def main():
         if cheak_bom[1] == False:
             vy *= -1
 
-        #衝突判定
+        # 衝突判定
         if kk_rct.colliderect(bom_rct):
             return print("END")
 
