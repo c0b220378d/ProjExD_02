@@ -19,6 +19,14 @@ def main():
     r_w = ran.randint(0, WIDTH)
     r_h = ran.randint(0, HEIGHT)
     bom_rct.center = (r_w, r_h)
+    key_d = {
+        pg.K_UP:(0, -5),
+        pg.K_DOWN:(0, 5),
+        pg.K_LEFT:(-5, 0),
+        pg.K_RIGHT:(5, 0)
+    }
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = (900, 400)
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -27,12 +35,19 @@ def main():
                 return
 
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, [900, 400])
+        screen.blit(kk_img, kk_rct)
         screen.blit(bom_img, bom_rct)
         pg.display.update()
+        key_lst = pg.key.get_pressed()
+        sum_v = [0, 0]
+        for key, mv in key_d.items():
+            if key_lst[key]:
+                sum_v[0] += mv[0]
+                sum_v[1] += mv[1]
         bom_rct.move_ip(5, 5)
+        kk_rct.move_ip(sum_v[0], sum_v[1])
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
